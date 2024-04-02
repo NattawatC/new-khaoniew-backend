@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  khaoniew-db:
+    image: mysql
+    container_name: khaoniew-db
+    environment:
+      MYSQL_DATABASE: khaoniew
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - '3307:3306'
+    volumes:
+      - khaoniew-db-dev:/var/lib/mysql
+
+volumes:
+  khaoniew-db-dev:
+    driver: local
+
