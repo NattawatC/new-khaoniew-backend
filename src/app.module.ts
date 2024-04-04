@@ -13,14 +13,14 @@ import { Feedback } from './typeorm/entities/Feedback';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 3307,
+      port: 31666,
       username: 'admin',
       password: 'admin',
       database: 'khaoniew',
       entities: [Patient, Meal, Food, Feedback],
       synchronize: true,
     }),
-    PatientModule
+    PatientModule,
   ],
   controllers: [AppController],
   providers: [AppService],
