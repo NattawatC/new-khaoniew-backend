@@ -107,6 +107,6 @@ export class PatientController {
 
   @Post('login')
   async login(@Body() userLoginDto: UserLoginDto){
-    return await this.authService.authenticatePatient(userLoginDto);
+    return await this.authService.authenticateUser(userLoginDto);
   }
 }
