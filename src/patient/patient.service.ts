@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from '../typeorm/entities/Patient';
 import { Repository } from 'typeorm';
@@ -21,8 +21,14 @@ export class PatientService {
     private feedbackRepository: Repository<Feedback>,
   ) {}
 
-  findByThaiId(thaiId: string): Promise<Patient> {
-    return this.patientRepository.findOne({ where: { thaiId } });
+  async findByThaiId(thaiId: string): Promise<Patient> {
+    const patient = await this.patientRepository.findOne({ where: { thaiId }, relations: ['meals', 'meals.food', 'meals.feedback'] });
+
+    if (!patient) {
+      throw new NotFoundException('Patient not found');
+    }
+
+    return patient;
   }
 
   findPatient() {
