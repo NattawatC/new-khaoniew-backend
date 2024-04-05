@@ -1,16 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Meal } from './Meal';
+import { MedicalCondition } from './MedicalCondition';
 
 @Entity({ name: 'patients' })
 export class Patient {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  thaiId: number;
+
+  @Column({ default: '' })
+  password: string;
 
   @Column()
-  name: string;
+  firstname: string;
 
   @Column()
-  surname: string;
+  lastname: string;
 
   @Column()
   age: number;
@@ -24,13 +35,13 @@ export class Patient {
   @Column()
   phoneNumber: string;
 
-  @Column({default: ''})
-  medicalCondition: string;
-
   @Column()
   healthRiskScore: number;
 
+  @ManyToMany(() => MedicalCondition)
+  @JoinTable()
+  medicalConditions: MedicalCondition[];
+
   @OneToMany(() => Meal, (meal) => meal.patient)
   meals: Meal[];
-
 }
