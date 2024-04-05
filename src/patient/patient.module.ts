@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Meal } from 'src/typeorm/entities/Meal';
 import { Food } from 'src/typeorm/entities/Food';
 import { Feedback } from 'src/typeorm/entities/Feedback';
+import { MedicalCondition } from 'src/typeorm/entities/MedicalCondition';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Patient, Meal, Food, Feedback])],
+  imports: [TypeOrmModule.forFeature([Patient, Meal, Food, Feedback, MedicalCondition])],
   controllers: [PatientController],
   providers: [PatientService],
 })

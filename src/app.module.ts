@@ -7,6 +7,7 @@ import { PatientModule } from './patient/patient.module';
 import { Meal } from './typeorm/entities/Meal';
 import { Food } from './typeorm/entities/Food';
 import { Feedback } from './typeorm/entities/Feedback';
+import { MedicalCondition } from './typeorm/entities/MedicalCondition';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { Feedback } from './typeorm/entities/Feedback';
       username: 'admin',
       password: 'admin',
       database: 'khaoniew',
-      entities: [Patient, Meal, Food, Feedback],
+      entities: [Patient, Meal, Food, Feedback, MedicalCondition],
       synchronize: true,
     }),
     PatientModule,
