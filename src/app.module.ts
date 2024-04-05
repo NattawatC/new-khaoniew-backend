@@ -10,8 +10,9 @@ import { Feedback } from './typeorm/entities/Feedback';
 import { UserModule } from './user/user.module';
 import { User } from './user/typeorm/entities/User';
 import { MedicalCondition } from './user/typeorm/entities/MedicalCondition';
-import { UserController } from './user/controller/user/user.controller';
-import { UserService } from './user/service/user/user.service';
+import { StaffModule } from './staff/staff.module';
+import { UserAuthModule } from './user-auth/user-auth.module';
+import { Staff } from './staff/typeorm/entity/Staff';
 
 @Module({
   imports: [
@@ -22,11 +23,13 @@ import { UserService } from './user/service/user/user.service';
       username: 'root',
       password: 'Co2345jj8',
       database: 'db1',
-      entities: [User, MedicalCondition],
+      entities: [User, MedicalCondition, Staff],
       synchronize: true,
       logging: true,
     }),
-    UserModule
+    UserModule,
+    StaffModule,
+    UserAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

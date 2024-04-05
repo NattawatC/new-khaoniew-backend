@@ -72,4 +72,6 @@ export class UserService {
     return user.medicalconditions.map(condition => condition.name);
   }
 
+  
+
 }
