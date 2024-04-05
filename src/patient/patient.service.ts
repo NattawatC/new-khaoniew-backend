@@ -30,16 +30,16 @@ export class PatientService {
     return this.patientRepository.save(newPatient);
   }
 
-  updatePatient(id: number, updatePatientDetails: UpdatePatientDto) {
-    return this.patientRepository.update({ id }, { ...updatePatientDetails });
+  updatePatient(thaiId: number, updatePatientDetails: UpdatePatientDto) {
+    return this.patientRepository.update({ thaiId }, { ...updatePatientDetails });
   }
 
-  deletePatient(id: number) {
-    return this.patientRepository.delete({ id });
+  deletePatient(thaiId: number) {
+    return this.patientRepository.delete({ thaiId });
   }
 
-  async createPatientMeal(id: number, mealDetails: CreatePatientMealDto) {
-    const patient = await this.patientRepository.findOneBy({ id });
+  async createPatientMeal(thaiId: number, mealDetails: CreatePatientMealDto) {
+    const patient = await this.patientRepository.findOneBy({ thaiId });
     if (!patient) {
       throw new HttpException(
         'Patient not found. Cannot create meal',
@@ -55,8 +55,8 @@ export class PatientService {
     return this.mealRepository.save(newMeal);
   }
 
-  async deletePatientMeal(id: number, mealId: number) {
-    const patient = await this.patientRepository.findOneBy({ id });
+  async deletePatientMeal(thaiId: number, mealId: number) {
+    const patient = await this.patientRepository.findOneBy({ thaiId });
     if (!patient) {
       throw new HttpException(
         'Patient not found. Cannot delete meal',
@@ -74,13 +74,13 @@ export class PatientService {
   }
 
   async createFood(
-    id: number,
+    thaiId: number,
     mealId: number,
     createFoodDetails: CreateFoodDto,
   ) {
     const meal = await this.mealRepository.findOneBy({
       id: mealId,
-      patient: { id },
+      patient: { thaiId },
     });
     if (!meal) {
       throw new HttpException(
@@ -97,13 +97,13 @@ export class PatientService {
   }
 
   async createFeedback(
-    id: number,
+    thaiId: number,
     mealId: number,
     feedback: CreateFeedbackDto,
   ) {
     const meal = await this.mealRepository.findOneBy({
       id: mealId,
-      patient: { id },
+      patient: { thaiId },
     });
 
     if (!meal) {
