@@ -21,6 +21,10 @@ export class PatientService {
     private feedbackRepository: Repository<Feedback>,
   ) {}
 
+  findByThaiId(thaiId: string): Promise<Patient> {
+    return this.patientRepository.findOne({ where: { thaiId } });
+  }
+
   findPatient() {
     return this.patientRepository.find({ relations: ['meals', 'meals.food', 'meals.feedback']});
   }
@@ -30,15 +34,15 @@ export class PatientService {
     return this.patientRepository.save(newPatient);
   }
 
-  updatePatient(thaiId: number, updatePatientDetails: UpdatePatientDto) {
+  updatePatient(thaiId: string, updatePatientDetails: UpdatePatientDto) {
     return this.patientRepository.update({ thaiId }, { ...updatePatientDetails });
   }
 
-  deletePatient(thaiId: number) {
+  deletePatient(thaiId: string) {
     return this.patientRepository.delete({ thaiId });
   }
 
-  async createPatientMeal(thaiId: number, mealDetails: CreatePatientMealDto) {
+  async createPatientMeal(thaiId: string, mealDetails: CreatePatientMealDto) {
     const patient = await this.patientRepository.findOneBy({ thaiId });
     if (!patient) {
       throw new HttpException(
@@ -55,7 +59,7 @@ export class PatientService {
     return this.mealRepository.save(newMeal);
   }
 
-  async deletePatientMeal(thaiId: number, mealId: number) {
+  async deletePatientMeal(thaiId: string, mealId: number) {
     const patient = await this.patientRepository.findOneBy({ thaiId });
     if (!patient) {
       throw new HttpException(
@@ -74,7 +78,7 @@ export class PatientService {
   }
 
   async createFood(
-    thaiId: number,
+    thaiId: string,
     mealId: number,
     createFoodDetails: CreateFoodDto,
   ) {
@@ -97,7 +101,7 @@ export class PatientService {
   }
 
   async createFeedback(
-    thaiId: number,
+    thaiId: string,
     mealId: number,
     feedback: CreateFeedbackDto,
   ) {
