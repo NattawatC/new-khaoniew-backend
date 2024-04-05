@@ -23,7 +23,7 @@ export class PatientController {
   constructor(private patientService: PatientService, private readonly authService: AuthService) {}
 
   @Get(':thaiId')
-  async findByThaiId(@Param('thaiId') thaiId: string): Promise<Patient> {
+  async findByThaiId(@Param('thaiId') thaiId: string) {
     return this.patientService.findByThaiId(thaiId);
   }
 
@@ -105,7 +105,7 @@ export class PatientController {
   //   return { isAuthenticated, userType };
   // }
 
-  @Get('login')
+  @Post('login')
   async login(@Body() userLoginDto: UserLoginDto){
     return await this.authService.authenticatePatient(userLoginDto);
   }
