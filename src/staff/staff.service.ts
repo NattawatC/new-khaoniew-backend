@@ -15,13 +15,13 @@ export class StaffService {
   }
 
   async findByFullName(fullName: string): Promise<Staff> {
-    const patient = await this.staffRepository.findOne({ where: { fullName }});
+    const staff = await this.staffRepository.findOne({ where: { fullName }});
 
-    if (!patient) {
+    if (!staff) {
       throw new NotFoundException('Staff not found');
     }
 
-    return patient;
+    return staff;
   }
 
   createStaff(staffDetails: CreateStaffDto) {
