@@ -14,13 +14,10 @@ import { UpdatePatientDto } from './dtos/UpdatePatient.dto';
 import { CreatePatientMealDto } from './dtos/CreatePatientMeal.dto';
 import { CreateFoodDto } from './dtos/CreateFood.dto';
 import { CreateFeedbackDto } from './dtos/CreateFeedback.dto';
-import { Patient } from 'src/typeorm/entities/Patient';
-import { AuthService } from 'src/Auth/auth.service';
-import { UserLoginDto } from './dtos/UserLogin.dto';
 
 @Controller('patients')
 export class PatientController {
-  constructor(private patientService: PatientService, private readonly authService: AuthService) {}
+  constructor(private patientService: PatientService) {}
 
   @Get(':thaiId')
   async findByThaiId(@Param('thaiId') thaiId: string) {
@@ -104,9 +101,4 @@ export class PatientController {
 
   //   return { isAuthenticated, userType };
   // }
-
-  @Post('login')
-  async login(@Body() userLoginDto: UserLoginDto){
-    return await this.authService.authenticateUser(userLoginDto);
-  }
 }
