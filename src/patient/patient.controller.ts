@@ -58,12 +58,17 @@ export class PatientController {
     await this.patientService.deletePatient(id);
   }
 
-  @Post(':id/meals')
+  @Get(':id/meals')
+  async getPatientMeals(@Param('id', ParseIntPipe) id: string) {
+    return this.patientService.getPatientMeals(id);
+  }
+
+  @Post(':thaiId/meals')
   createMeal(
-    @Param('id', ParseIntPipe) id: string,
+    @Param('thaiId', ParseIntPipe) ThaiId: string,
     @Body() createMealDetails: CreatePatientMealDto,
   ) {
-    return this.patientService.createPatientMeal(id, createMealDetails);
+    return this.patientService.createPatientMeal(ThaiId, createMealDetails);
   }
 
   @Delete(':id/meals/:mealId')
