@@ -1,7 +1,12 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from '../typeorm/entities/Patient';
-import { Repository } from 'typeorm';
+import { Repository, Transaction } from 'typeorm';
 import { CreatePatientDto } from './dtos/CreatePatient.dto';
 import { UpdatePatientDto } from './dtos/UpdatePatient.dto';
 import { CreatePatientMealDto } from './dtos/CreatePatientMeal.dto';
@@ -22,7 +27,10 @@ export class PatientService {
   ) {}
 
   async findByThaiId(thaiId: string): Promise<Patient> {
-    const patient = await this.patientRepository.findOne({ where: { thaiId }, relations: ['meals', 'meals.food', 'meals.feedback'] });
+    const patient = await this.patientRepository.findOne({
+      where: { thaiId },
+      relations: ['meals', 'meals.food', 'meals.feedback'],
+    });
 
     if (!patient) {
       throw new NotFoundException('Patient not found');
@@ -32,7 +40,9 @@ export class PatientService {
   }
 
   findPatient() {
-    return this.patientRepository.find({ relations: ['meals', 'meals.food', 'meals.feedback']});
+    return this.patientRepository.find({
+      relations: ['meals', 'meals.food', 'meals.feedback'],
+    });
   }
 
   createPatient(patientDetails: CreatePatientDto) {
@@ -41,14 +51,27 @@ export class PatientService {
   }
 
   updatePatient(thaiId: string, updatePatientDetails: UpdatePatientDto) {
-    return this.patientRepository.update({ thaiId }, { ...updatePatientDetails });
+    return this.patientRepository.update(
+      { thaiId },
+      { ...updatePatientDetails },
+    );
   }
 
   deletePatient(thaiId: string) {
     return this.patientRepository.delete({ thaiId });
   }
 
-  async createPatientMeal(thaiId: string, mealDetails: CreatePatientMealDto) {
+  getPatientMeals(thaiId: string) {
+    return this.mealRepository.find({
+      where: { patient: { thaiId } },
+      relations: ['food', 'feedback'],
+    });
+  }
+
+  async createPatientMeal(
+    thaiId: string,
+    mealDetails: CreatePatientMealDto,
+  ): Promise<Meal> {
     const patient = await this.patientRepository.findOneBy({ thaiId });
     if (!patient) {
       throw new HttpException(
@@ -57,12 +80,27 @@ export class PatientService {
       );
     }
 
+    // Create meal
     const newMeal = this.mealRepository.create({
       ...mealDetails,
       date: new Date(),
       patient,
     });
-    return this.mealRepository.save(newMeal);
+    await this.mealRepository.save(newMeal);
+
+    const newFood = this.foodRepository.create({
+      name: mealDetails.name,
+    });
+    await this.foodRepository.save(newFood);
+
+    newMeal.food = newFood;
+
+    await this.mealRepository.save(newMeal);
+
+    return this.mealRepository.findOne({
+      where: { id: newMeal.id },
+      relations: ['food', 'feedback'],
+    });
   }
 
   async deletePatientMeal(thaiId: string, mealId: number) {
