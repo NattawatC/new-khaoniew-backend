@@ -15,7 +15,7 @@ export class AuthService {
     private readonly patientService: PatientService,
     private readonly staffService: StaffService,
   ) {}
-  async authenticateUser(userLoginDto: UserLoginDto): Promise<Patient | Staff> {
+  async authenticateUser(userLoginDto: UserLoginDto): Promise<{ user: Patient | Staff, userType: string }> {
     const { username, password } = userLoginDto;
 
     // Check if username is numeric (assuming only patient Thai IDs are numeric)
@@ -30,7 +30,7 @@ export class AuthService {
         throw new UnauthorizedException('Wrong password');
       }
 
-      return patient;
+      return { user: patient, userType: 'patient' };
     } else {
       // Find the staff by fullname using the StaffService
       const staff = await this.staffService.findByFullName(username);
@@ -42,7 +42,7 @@ export class AuthService {
         throw new UnauthorizedException('Wrong password');
       }
 
-      return staff;
+      return { user: staff, userType: 'staff' };
     }
   }
 }
