@@ -1,14 +1,19 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { compare } from 'bcrypt';
-import { UserLoginDto } from 'src/patient/dtos/UserLogin.dto';
+import { UserLoginDto } from 'src/auth/dto/UserLogin.dto';
 import { Patient } from 'src/typeorm/entities/Patient';
-import { PatientService } from 'src/patient/patient.service'; // Import the PatientService
+import { PatientService } from 'src/patient/patient.service';
 import { Staff } from 'src/typeorm/entities/Staff';
+import { StaffService } from 'src/staff/staff.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private patientService: PatientService, private staffService: StaffService
+    private readonly patientService: PatientService,
+    private readonly staffService: StaffService,
   ) {}
   async authenticateUser(userLoginDto: UserLoginDto): Promise<Patient | Staff> {
     const { username, password } = userLoginDto;
