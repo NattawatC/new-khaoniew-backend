@@ -15,7 +15,7 @@ export class StaffService {
   }
 
   async findByFullName(fullName: string): Promise<Staff> {
-    const staff = await this.staffRepository.findOne({ where: { fullname }});
+    const staff = await this.staffRepository.findOne({ where: { fullName }});
 
     if (!staff) {
       throw new NotFoundException('Staff not found');
