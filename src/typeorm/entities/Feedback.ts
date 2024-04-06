@@ -6,5 +6,8 @@ export class Feedback {
   id: number;
 
   @Column({default: 'รอการรีวิว...'})
-  detail: string;
+  review: string;
+
+  @Column({default: 'ยังไม่ระบุ'})
+  reviewBy: string;
 }

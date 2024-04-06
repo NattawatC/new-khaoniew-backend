@@ -8,6 +8,6 @@ export class Food{
     @Column()
     name: string;
 
-    @Column()
+    @Column({default: 0})
     score: number;
 }
