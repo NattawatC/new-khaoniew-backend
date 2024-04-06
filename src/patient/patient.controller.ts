@@ -31,14 +31,14 @@ export class PatientController {
     return patients;
   }
 
-  // @Get(':thaiId/medicalconditions')
-  //   async getUserMedicalConditions(@Param('thaiId') thaiId: string): Promise<string[]> {
-  //     try {
-  //       return await this.patientService.getMedicalConditions(thaiId);
-  //     } catch (error) {
-  //       throw new NotFoundException(error.message);
-  //     }
-  //   }
+  @Get(':thaiId/medicalconditions')
+    async getUserMedicalConditions(@Param('thaiId') thaiId: string): Promise<string[]> {
+      try {
+        return await this.patientService.getMedicalConditions(thaiId);
+      } catch (error) {
+        throw new NotFoundException(error.message);
+      }
+    }
 
   @Post()
   createPatient(@Body() createPatientDto: CreatePatientDto) {
