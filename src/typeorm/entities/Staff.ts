@@ -7,7 +7,7 @@ export class Staff {
     id: number;
 
     @Column()
-    fullName: string;
+    fullname: string;
 
     @Column()
     password: string;
