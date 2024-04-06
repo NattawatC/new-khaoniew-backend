@@ -119,9 +119,15 @@ export class PatientService {
       name: mealDetails.name,
     });
     await this.foodRepository.save(newFood);
-
+    
+    const newFeedback = this.feedbackRepository.create({
+      review: 'รอการรีวิว...',
+      reviewBy: 'ยังไม่ระบุ',
+    });
+    await this.feedbackRepository.save(newFeedback);
+    
     newMeal.food = newFood;
-
+    newMeal.feedback = newFeedback;
     await this.mealRepository.save(newMeal);
 
     return this.mealRepository.findOne({
@@ -148,54 +154,54 @@ export class PatientService {
     }
   }
 
-  async createFood(
-    thaiId: string,
-    mealId: number,
-    createFoodDetails: CreateFoodDto,
-  ) {
-    const meal = await this.mealRepository.findOneBy({
-      id: mealId,
-      patient: { thaiId },
-    });
-    if (!meal) {
-      throw new HttpException(
-        'Meal not found for this patient. Cannot create food',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  // async createFood(
+  //   thaiId: string,
+  //   mealId: number,
+  //   createFoodDetails: CreateFoodDto,
+  // ) {
+  //   const meal = await this.mealRepository.findOneBy({
+  //     id: mealId,
+  //     patient: { thaiId },
+  //   });
+  //   if (!meal) {
+  //     throw new HttpException(
+  //       'Meal not found for this patient. Cannot create food',
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
 
-    const newFood = this.foodRepository.create(createFoodDetails);
-    const savedFood = await this.foodRepository.save(newFood);
+  //   const newFood = this.foodRepository.create(createFoodDetails);
+  //   const savedFood = await this.foodRepository.save(newFood);
 
-    meal.food = savedFood;
-    return this.mealRepository.save(meal);
-  }
+  //   meal.food = savedFood;
+  //   return this.mealRepository.save(meal);
+  // }
 
-  async createFeedback(
-    thaiId: string,
-    mealId: number,
-    feedback: CreateFeedbackDto,
-  ) {
-    const meal = await this.mealRepository.findOneBy({
-      id: mealId,
-      patient: { thaiId },
-    });
+  // async createFeedback(
+  //   thaiId: string,
+  //   mealId: number,
+  //   feedback: CreateFeedbackDto,
+  // ) {
+  //   const meal = await this.mealRepository.findOneBy({
+  //     id: mealId,
+  //     patient: { thaiId },
+  //   });
 
-    if (!meal) {
-      throw new HttpException(
-        'Meal not found for this patient. Cannot create feedback',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  //   if (!meal) {
+  //     throw new HttpException(
+  //       'Meal not found for this patient. Cannot create feedback',
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
 
-    const newFeedback = this.feedbackRepository.create(feedback);
-    const savedFeedback = await this.feedbackRepository.save(newFeedback);
+  //   const newFeedback = this.feedbackRepository.create(feedback);
+  //   const savedFeedback = await this.feedbackRepository.save(newFeedback);
 
-    meal.reviewStatus = true;
-    meal.feedback = savedFeedback;
+  //   meal.reviewStatus = true;
+  //   meal.feedback = savedFeedback;
 
-    return this.mealRepository.save(meal);
-  }
+  //   return this.mealRepository.save(meal);
+  // }
 
   async getMedicalConditions(thaiId: string): Promise<string[]> {
     // Find patient by Thai ID and load medical conditions
