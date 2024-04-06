@@ -9,6 +9,8 @@ import { Food } from './typeorm/entities/Food';
 import { Feedback } from './typeorm/entities/Feedback';
 import { MedicalCondition } from './typeorm/entities/MedicalCondition';
 import { Staff } from './typeorm/entities/Staff';
+import { StaffModule } from './staff/staff.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { Staff } from './typeorm/entities/Staff';
       synchronize: true,
     }),
     PatientModule,
+    StaffModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
