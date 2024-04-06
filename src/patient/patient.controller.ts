@@ -7,6 +7,7 @@ import {
   Patch,
   ParseIntPipe,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { CreatePatientDto } from './dtos/CreatePatient.dto';
@@ -30,8 +31,17 @@ export class PatientController {
     return patients;
   }
 
+  // @Get(':thaiId/medicalconditions')
+  //   async getUserMedicalConditions(@Param('thaiId') thaiId: string): Promise<string[]> {
+  //     try {
+  //       return await this.patientService.getMedicalConditions(thaiId);
+  //     } catch (error) {
+  //       throw new NotFoundException(error.message);
+  //     }
+  //   }
+
   @Post()
-  createPateint(@Body() createPatientDto: CreatePatientDto) {
+  createPatient(@Body() createPatientDto: CreatePatientDto) {
     return this.patientService.createPatient(createPatientDto);
   }
 
@@ -81,24 +91,4 @@ export class PatientController {
   ) {
     return this.patientService.createFeedback(id, mealId, createFeedbackDto);
   }
-
-  // @Get('login')
-  // async login(@Body() body: { username: string; password: string }): Promise<{ isAuthenticated: boolean; userType: string }> {
-  //   const { username, password } = body;
-  //   let isAuthenticated = false;
-  //   let userType = '';
-
-  //   // Check if the username is a number (Thai ID), indicating a patient
-  //   if (!isNaN(parseInt(username))) {
-  //     const result = await this.authService.authenticatePatient(username, password);
-  //     isAuthenticated = result.isAuthenticated;
-  //     userType = 'patient';
-  //   } else {
-  //     // const result = await this.authService.authenticateStaff(username, password);
-  //     isAuthenticated = false;
-  //     userType = 'staff';
-  //   }
-
-  //   return { isAuthenticated, userType };
-  // }
 }

@@ -18,7 +18,7 @@ export class StaffService {
     const patient = await this.staffRepository.findOne({ where: { fullName }});
 
     if (!patient) {
-      throw new NotFoundException('Patient not found');
+      throw new NotFoundException('Staff not found');
     }
 
     return patient;

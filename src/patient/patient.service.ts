@@ -131,4 +131,17 @@ export class PatientService {
 
     return this.mealRepository.save(meal);
   }
+
+  // async getMedicalConditions(thaiId: string): Promise<string[]> {
+  //   // Find patient by Thai ID and load medical conditions
+  //   const patient = await this.patientRepository.findOne({
+  //     where: { thaiId },
+  //     relations: ['medicalconditions'],
+  //   });
+  //   if (!patient) {
+  //     throw new Error(`User with Thai ID ${thaiId} not found`);
+  //   }
+  //   // Extract and return names of medical conditions
+  //   return patient.medicalConditions.map(condition => condition.name);
+  // }
 }
