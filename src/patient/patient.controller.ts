@@ -7,6 +7,7 @@ import {
   Patch,
   ParseIntPipe,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { CreatePatientDto } from './dtos/CreatePatient.dto';
@@ -19,33 +20,47 @@ import { CreateFeedbackDto } from './dtos/CreateFeedback.dto';
 export class PatientController {
   constructor(private patientService: PatientService) {}
 
+  @Get(':thaiId')
+  async findByThaiId(@Param('thaiId') thaiId: string) {
+    return this.patientService.findByThaiId(thaiId);
+  }
+
   @Get()
   async getPatient() {
     const patients = await this.patientService.findPatient();
     return patients;
   }
 
+  // @Get(':thaiId/medicalconditions')
+  //   async getUserMedicalConditions(@Param('thaiId') thaiId: string): Promise<string[]> {
+  //     try {
+  //       return await this.patientService.getMedicalConditions(thaiId);
+  //     } catch (error) {
+  //       throw new NotFoundException(error.message);
+  //     }
+  //   }
+
   @Post()
-  createPateint(@Body() createPatientDto: CreatePatientDto) {
+  createPatient(@Body() createPatientDto: CreatePatientDto) {
     return this.patientService.createPatient(createPatientDto);
   }
 
   @Patch(':id')
   async updatePatient(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updatePatientDto: UpdatePatientDto,
   ) {
     await this.patientService.updatePatient(id, updatePatientDto);
   }
 
   @Delete(':id')
-  async deletePatientById(@Param('id', ParseIntPipe) id: number) {
+  async deletePatientById(@Param('id', ParseIntPipe) id: string) {
     await this.patientService.deletePatient(id);
   }
 
   @Post(':id/meals')
   createMeal(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() createMealDetails: CreatePatientMealDto,
   ) {
     return this.patientService.createPatientMeal(id, createMealDetails);
@@ -53,7 +68,7 @@ export class PatientController {
 
   @Delete(':id/meals/:mealId')
   deleteMeal(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Param('mealId', ParseIntPipe) mealId: number,
   ) {
     return this.patientService.deletePatientMeal(id, mealId);
@@ -61,7 +76,7 @@ export class PatientController {
 
   @Post(':id/meals/:mealId/foods')
   createFood(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Param('mealId', ParseIntPipe) mealId: number,
     @Body() createFoodDto: CreateFoodDto,
   ) {
@@ -70,7 +85,7 @@ export class PatientController {
 
   @Post(':id/meals/:mealId/feedbacks')
   createFeedback(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Param('mealId', ParseIntPipe) mealId: number,
     @Body() createFeedbackDto: CreateFeedbackDto,
   ) {

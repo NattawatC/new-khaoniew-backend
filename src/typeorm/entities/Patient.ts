@@ -5,17 +5,24 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  BeforeInsert,
 } from 'typeorm';
 import { Meal } from './Meal';
 import { MedicalCondition } from './MedicalCondition';
+import * as bcrypt from "bcrypt";
 
 @Entity({ name: 'patients' })
 export class Patient {
   @PrimaryColumn()
-  thaiId: number;
+  thaiId: string;
 
   @Column({ default: '' })
   password: string;
+
+  @BeforeInsert()
+  async hashPassword() {
+      this.password = await bcrypt.hash(this.password, 10);
+  }
 
   @Column()
   firstname: string;

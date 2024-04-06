@@ -9,7 +9,9 @@ import { Feedback } from 'src/typeorm/entities/Feedback';
 import { MedicalCondition } from 'src/typeorm/entities/MedicalCondition';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Patient, Meal, Food, Feedback, MedicalCondition])],
+  imports: [
+    TypeOrmModule.forFeature([Patient, Meal, Food, Feedback, MedicalCondition]),
+  ],
   controllers: [PatientController],
   providers: [PatientService],
 })
