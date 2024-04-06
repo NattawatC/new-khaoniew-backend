@@ -9,10 +9,11 @@ import { StaffService } from '../staff/staff.service';
 import { Meal } from 'src/typeorm/entities/Meal';
 import { Food } from 'src/typeorm/entities/Food';
 import { Feedback } from 'src/typeorm/entities/Feedback';
+import { MedicalCondition } from 'src/typeorm/entities/MedicalCondition';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Patient, Staff, Meal, Food, Feedback]),
+    TypeOrmModule.forFeature([Patient, Staff, Meal, Food, Feedback, MedicalCondition]),
   ],
   controllers: [AuthController],
   providers: [AuthService, PatientService, StaffService],

@@ -6,6 +6,6 @@ export class CreatePatientDto {
   gender: string;
   address: string;
   phoneNumber: string;
-  medicalCondition: string;
+  medicalCondition?: string[];
   healthRiskScore: number;
 }
