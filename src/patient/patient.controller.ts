@@ -79,21 +79,21 @@ export class PatientController {
     return this.patientService.deletePatientMeal(id, mealId);
   }
 
-  @Post(':id/meals/:mealId/foods')
-  createFood(
-    @Param('id', ParseIntPipe) id: string,
-    @Param('mealId', ParseIntPipe) mealId: number,
-    @Body() createFoodDto: CreateFoodDto,
-  ) {
-    return this.patientService.createFood(id, mealId, createFoodDto);
-  }
+  // @Post(':id/meals/:mealId/foods')
+  // createFood(
+  //   @Param('id', ParseIntPipe) id: string,
+  //   @Param('mealId', ParseIntPipe) mealId: number,
+  //   @Body() createFoodDto: CreateFoodDto,
+  // ) {
+  //   return this.patientService.createFood(id, mealId, createFoodDto);
+  // }
 
-  @Post(':id/meals/:mealId/feedbacks')
-  createFeedback(
-    @Param('id', ParseIntPipe) id: string,
-    @Param('mealId', ParseIntPipe) mealId: number,
-    @Body() createFeedbackDto: CreateFeedbackDto,
-  ) {
-    return this.patientService.createFeedback(id, mealId, createFeedbackDto);
-  }
+  // @Post(':id/meals/:mealId/feedbacks')
+  // createFeedback(
+  //   @Param('id', ParseIntPipe) id: string,
+  //   @Param('mealId', ParseIntPipe) mealId: number,
+  //   @Body() createFeedbackDto: CreateFeedbackDto,
+  // ) {
+  //   return this.patientService.createFeedback(id, mealId, createFeedbackDto);
+  // }
 }
