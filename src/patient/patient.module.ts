@@ -7,11 +7,12 @@ import { Meal } from 'src/typeorm/entities/Meal';
 import { Food } from 'src/typeorm/entities/Food';
 import { Feedback } from 'src/typeorm/entities/Feedback';
 import { MedicalCondition } from 'src/typeorm/entities/MedicalCondition';
-import { AuthService } from 'src/Auth/auth.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Patient, Meal, Food, Feedback, MedicalCondition])],
+  imports: [
+    TypeOrmModule.forFeature([Patient, Meal, Food, Feedback, MedicalCondition]),
+  ],
   controllers: [PatientController],
-  providers: [PatientService, AuthService],
+  providers: [PatientService],
 })
 export class PatientModule {}
