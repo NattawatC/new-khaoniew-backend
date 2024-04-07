@@ -42,8 +42,8 @@ export class Patient {
   @Column()
   phoneNumber: string;
 
-  @Column({ nullable: true })
-  healthRiskScore: number | null;
+  @Column({ default: 0 })
+  healthRiskScore: number;
 
   @ManyToMany(() => MedicalCondition)
   @JoinTable()

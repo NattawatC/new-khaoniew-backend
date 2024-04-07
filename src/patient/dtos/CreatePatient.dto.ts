@@ -33,5 +33,5 @@ export class CreatePatientDto {
 
   @IsOptional()
   @IsInt()
-  healthRiskScore: number | null = null;
+  healthRiskScore: number;
 }
