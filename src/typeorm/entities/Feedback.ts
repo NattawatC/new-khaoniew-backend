@@ -8,6 +8,6 @@ export class Feedback {
   @Column({default: 'รอการรีวิว...'})
   review: string;
 
-  @Column({default: 'ยังไม่ระบุ'})
+  @Column({default: 'ไม่ระบุ'})
   reviewBy: string;
 }

@@ -110,7 +110,6 @@ export class PatientService {
     // Create meal
     const newMeal = this.mealRepository.create({
       ...mealDetails,
-      date: new Date(),
       patient,
     });
     await this.mealRepository.save(newMeal);
@@ -122,7 +121,7 @@ export class PatientService {
     
     const newFeedback = this.feedbackRepository.create({
       review: 'รอการรีวิว...',
-      reviewBy: 'ยังไม่ระบุ',
+      reviewBy: 'ไม่ระบุ',
     });
     await this.feedbackRepository.save(newFeedback);
     
