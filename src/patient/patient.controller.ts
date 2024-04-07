@@ -63,12 +63,12 @@ export class PatientController {
     return this.patientService.getPatientMeals(id);
   }
 
-  @Post(':thaiId/meals')
+  @Post(':id/meals')
   createMeal(
-    @Param('thaiId', ParseIntPipe) ThaiId: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() createMealDetails: CreatePatientMealDto,
   ) {
-    return this.patientService.createPatientMeal(ThaiId, createMealDetails);
+    return this.patientService.createPatientMeal(id, createMealDetails);
   }
 
   @Delete(':id/meals/:mealId')
