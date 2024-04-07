@@ -114,8 +114,12 @@ export class PatientService {
     });
     await this.mealRepository.save(newMeal);
 
+    const scoreInGrams = parseInt(mealDetails.score); 
+    const score = Math.round(scoreInGrams / 10);
+
     const newFood = this.foodRepository.create({
       name: mealDetails.name,
+      score: score.toString(),
     });
     await this.foodRepository.save(newFood);
     
