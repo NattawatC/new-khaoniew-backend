@@ -13,7 +13,7 @@ import { CreatePatientMealDto } from './dtos/CreatePatientMeal.dto';
 import { Meal } from 'src/typeorm/entities/Meal';
 import { CreateFoodDto } from './dtos/CreateFood.dto';
 import { Food } from 'src/typeorm/entities/Food';
-import { CreateFeedbackDto } from './dtos/CreateFeedback.dto';
+import { UpdateFeedbackDto } from './dtos/UpdateFeedback.dto';
 import { Feedback } from 'src/typeorm/entities/Feedback';
 import { MedicalCondition } from 'src/typeorm/entities/MedicalCondition';
 
@@ -26,7 +26,7 @@ export class PatientService {
     @InjectRepository(Feedback)
     private feedbackRepository: Repository<Feedback>,
     @InjectRepository(MedicalCondition)
-    private readonly medicalConditionRepository: Repository<MedicalCondition>
+    private readonly medicalConditionRepository: Repository<MedicalCondition>,
   ) {}
 
   async findByThaiId(thaiId: string): Promise<Patient> {
@@ -56,26 +56,45 @@ export class PatientService {
 
     // Iterate over medical condition names
     for (const medicalConditionName of medicalConditionNames) {
-        // Check if medical condition with given name already exists
-        let medicalCondition = await this.medicalConditionRepository.findOne({ where: { name: medicalConditionName } });
+      // Check if medical condition with given name already exists
+      let medicalCondition = await this.medicalConditionRepository.findOne({
+        where: { name: medicalConditionName },
+      });
 
-        // If medical condition doesn't exist, create a new one
-        if (!medicalCondition) {
-            medicalCondition = this.medicalConditionRepository.create({ name: medicalConditionName });
-            await this.medicalConditionRepository.save(medicalCondition);
-        }
+      // If medical condition doesn't exist, create a new one
+      if (!medicalCondition) {
+        medicalCondition = this.medicalConditionRepository.create({
+          name: medicalConditionName,
+        });
+        await this.medicalConditionRepository.save(medicalCondition);
+      }
 
-        // Add medical condition to the array
-        medicalConditions.push(medicalCondition);
+      // Add medical condition to the array
+      medicalConditions.push(medicalCondition);
     }
 
     // Create patient entity with associated medical conditions
-    const newPatient = this.patientRepository.create({ ...rest, medicalConditions });
+    const newPatient = this.patientRepository.create({
+      ...rest,
+      medicalConditions,
+    });
 
     // Save patient entity
     return this.patientRepository.save(newPatient);
-}
+  }
 
+  async getMedicalConditions(thaiId: string): Promise<string[]> {
+    // Find patient by Thai ID and load medical conditions
+    const patient = await this.patientRepository.findOne({
+      where: { thaiId },
+      relations: ['medicalConditions'],
+    });
+    if (!patient) {
+      throw new Error(`User with Thai ID ${thaiId} not found`);
+    }
+    // Extract and return names of medical conditions
+    return patient.medicalConditions.map((condition) => condition.name);
+  }
 
   updatePatient(thaiId: string, updatePatientDetails: UpdatePatientDto) {
     return this.patientRepository.update(
@@ -88,9 +107,20 @@ export class PatientService {
     return this.patientRepository.delete({ thaiId });
   }
 
+  deletePatientByAge(age: number) {
+    return this.patientRepository.delete({ age });
+  }
+
   getPatientMeals(thaiId: string) {
     return this.mealRepository.find({
       where: { patient: { thaiId } },
+      relations: ['food', 'feedback'],
+    });
+  }
+
+  getPatientAMeal(thaiId: string, mealId: number) {
+    return this.mealRepository.findOne({
+      where: { id: mealId, patient: { thaiId } },
       relations: ['food', 'feedback'],
     });
   }
@@ -114,7 +144,7 @@ export class PatientService {
     });
     await this.mealRepository.save(newMeal);
 
-    const scoreInGrams = parseInt(mealDetails.score); 
+    const scoreInGrams = parseInt(mealDetails.score);
     const score = Math.round(scoreInGrams / 10);
 
     const newFood = this.foodRepository.create({
@@ -122,13 +152,13 @@ export class PatientService {
       score: score.toString(),
     });
     await this.foodRepository.save(newFood);
-    
+
     const newFeedback = this.feedbackRepository.create({
       review: 'รอการรีวิว...',
       reviewBy: 'ไม่ระบุ',
     });
     await this.feedbackRepository.save(newFeedback);
-    
+
     newMeal.food = newFood;
     newMeal.feedback = newFeedback;
     await this.mealRepository.save(newMeal);
@@ -157,6 +187,22 @@ export class PatientService {
     }
   }
 
+  async getFeedback(thaiId: string, mealId: number, feedbackId: number) {
+    const meal = await this.getPatientAMeal(thaiId, mealId);
+    if (!meal) {
+      throw new HttpException(
+        'Meal not found for this patient',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const feedback = await this.feedbackRepository.findOneBy({
+      id: feedbackId,
+    });
+
+    return feedback;
+  }
+
   // async createFood(
   //   thaiId: string,
   //   mealId: number,
@@ -180,42 +226,26 @@ export class PatientService {
   //   return this.mealRepository.save(meal);
   // }
 
-  // async createFeedback(
-  //   thaiId: string,
-  //   mealId: number,
-  //   feedback: CreateFeedbackDto,
-  // ) {
-  //   const meal = await this.mealRepository.findOneBy({
-  //     id: mealId,
-  //     patient: { thaiId },
-  //   });
-
-  //   if (!meal) {
-  //     throw new HttpException(
-  //       'Meal not found for this patient. Cannot create feedback',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-
-  //   const newFeedback = this.feedbackRepository.create(feedback);
-  //   const savedFeedback = await this.feedbackRepository.save(newFeedback);
-
-  //   meal.reviewStatus = true;
-  //   meal.feedback = savedFeedback;
-
-  //   return this.mealRepository.save(meal);
-  // }
-
-  async getMedicalConditions(thaiId: string): Promise<string[]> {
-    // Find patient by Thai ID and load medical conditions
-    const patient = await this.patientRepository.findOne({
-      where: { thaiId },
-      relations: ['medicalConditions'],
-    });
-    if (!patient) {
-      throw new Error(`User with Thai ID ${thaiId} not found`);
+  async updateFeedback(
+    thaiId: string,
+    mealId: number,
+    feedback: UpdateFeedbackDto,
+  ) {
+    const meal = await this.getPatientAMeal(thaiId, mealId);
+    if (!meal) {
+      throw new HttpException(
+        'Meal not found for this patient',
+        HttpStatus.NOT_FOUND,
+      );
     }
-    // Extract and return names of medical conditions
-    return patient.medicalConditions.map(condition => condition.name);
+    const feedbackToUpdate = meal.feedback;
+
+    feedbackToUpdate.review = feedback.review;
+    feedbackToUpdate.reviewBy = feedback.reviewBy;
+  
+    await this.feedbackRepository.save(feedbackToUpdate);
+  
+    meal.reviewStatus = true;
+    return this.mealRepository.save(meal);
   }
 }
