@@ -8,13 +8,14 @@ import {
   ParseIntPipe,
   Delete,
   NotFoundException,
+  Put,
 } from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { CreatePatientDto } from './dtos/CreatePatient.dto';
 import { UpdatePatientDto } from './dtos/UpdatePatient.dto';
 import { CreatePatientMealDto } from './dtos/CreatePatientMeal.dto';
 import { CreateFoodDto } from './dtos/CreateFood.dto';
-import { CreateFeedbackDto } from './dtos/CreateFeedback.dto';
+import { UpdateFeedbackDto } from './dtos/UpdateFeedback.dto';
 
 @Controller('patients')
 export class PatientController {
@@ -32,13 +33,15 @@ export class PatientController {
   }
 
   @Get(':thaiId/medicalconditions')
-    async getUserMedicalConditions(@Param('thaiId') thaiId: string): Promise<string[]> {
-      try {
-        return await this.patientService.getMedicalConditions(thaiId);
-      } catch (error) {
-        throw new NotFoundException(error.message);
-      }
+  async getUserMedicalConditions(
+    @Param('thaiId') thaiId: string,
+  ): Promise<string[]> {
+    try {
+      return await this.patientService.getMedicalConditions(thaiId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
     }
+  }
 
   @Post()
   createPatient(@Body() createPatientDto: CreatePatientDto) {
@@ -58,9 +61,23 @@ export class PatientController {
     await this.patientService.deletePatient(id);
   }
 
+  @Delete(':age')
+  async deletePatientByAge(
+  @Param('age') age: number){
+    await this.patientService.deletePatientByAge(age);
+  }
+
   @Get(':id/meals')
   async getPatientMeals(@Param('id', ParseIntPipe) id: string) {
     return this.patientService.getPatientMeals(id);
+  }
+
+  @Get(':id/meals/:mealId')
+  async getPatientAMeal(
+    @Param('id', ParseIntPipe) id: string,
+    @Param('mealId', ParseIntPipe) mealId: number,
+  ) {
+    return this.patientService.getPatientAMeal(id, mealId);
   }
 
   @Post(':id/meals')
@@ -79,6 +96,15 @@ export class PatientController {
     return this.patientService.deletePatientMeal(id, mealId);
   }
 
+  // @Get(':id/meals/:mealId/feedbacks/:feedbackId')
+  // getFeedback(
+  //   @Param('id', ParseIntPipe) id: string,
+  //   @Param('mealId', ParseIntPipe) mealId: number,
+  //   @Param('feedbackId', ParseIntPipe) feedbackId: number,
+  // ) {
+  //   return this.patientService.getAFeedbackMeal(mealId, feedbackId);
+  // }
+
   // @Post(':id/meals/:mealId/foods')
   // createFood(
   //   @Param('id', ParseIntPipe) id: string,
@@ -88,12 +114,25 @@ export class PatientController {
   //   return this.patientService.createFood(id, mealId, createFoodDto);
   // }
 
-  // @Post(':id/meals/:mealId/feedbacks')
-  // createFeedback(
-  //   @Param('id', ParseIntPipe) id: string,
-  //   @Param('mealId', ParseIntPipe) mealId: number,
-  //   @Body() createFeedbackDto: CreateFeedbackDto,
-  // ) {
-  //   return this.patientService.createFeedback(id, mealId, createFeedbackDto);
-  // }
+  @Get(':id/meals/:mealId/feedbacks/:feedbackId')
+  getFeedback(
+    @Param('id', ParseIntPipe) id: string,
+    @Param('mealId', ParseIntPipe) mealId: number,
+    @Param('feedbackId', ParseIntPipe) feedbackId: number,
+  ) {
+    return this.patientService.getFeedback(id, mealId, feedbackId);
+  }
+
+  @Put(':id/meals/:mealId/feedbacks')
+  updateFeedback(
+    @Param('id', ParseIntPipe) id: string,
+    @Param('mealId', ParseIntPipe) mealId: number,
+    @Body() updateFeedbackDetails: UpdateFeedbackDto,
+  ) {
+    return this.patientService.updateFeedback(
+      id,
+      mealId,
+      updateFeedbackDetails,
+    );
+  }
 }
