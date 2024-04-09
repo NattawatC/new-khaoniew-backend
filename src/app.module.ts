@@ -11,6 +11,7 @@ import { MedicalCondition } from './typeorm/entities/MedicalCondition';
 import { Staff } from './typeorm/entities/Staff';
 import { StaffModule } from './staff/staff.module';
 import { AuthModule } from './auth/auth.module';
+import { SocketGateway } from './socket/socket.gateway';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SocketGateway],
 })
 export class AppModule {}
