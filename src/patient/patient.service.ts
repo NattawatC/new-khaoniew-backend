@@ -143,12 +143,13 @@ export class PatientService {
       patient,
     });
     await this.mealRepository.save(newMeal);
-
+    
     const scoreInGrams = parseInt(mealDetails.score);
     const score = Math.round(scoreInGrams / 10);
 
     const newFood = this.foodRepository.create({
       name: mealDetails.name,
+      carbs: scoreInGrams,
       score: score.toString(),
     });
     await this.foodRepository.save(newFood);

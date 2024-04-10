@@ -8,6 +8,9 @@ export class Food{
     @Column()
     name: string;
 
+    @Column({default: 0})
+    carbs: number;
+
     @Column({default: '0'})
     score: string;
 }
