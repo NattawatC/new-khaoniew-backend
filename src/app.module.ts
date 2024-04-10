@@ -23,7 +23,7 @@ import { AuthModule } from './auth/auth.module';
       database: 'khaoniew',
       entities: [Patient, Meal, Food, Feedback, MedicalCondition, Staff],
       synchronize: true,
-      logging: true,
+      // logging: true,
     }),
     PatientModule,
     StaffModule,

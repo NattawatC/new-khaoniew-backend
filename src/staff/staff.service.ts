@@ -15,7 +15,7 @@ export class StaffService {
   }
 
   async findByFullName(fullName: string): Promise<Staff> {
-    const staff = await this.staffRepository.findOne({ where: { fullName }});
+    const staff = await this.staffRepository.findOne({ where: { fullName } });
 
     if (!staff) {
       throw new NotFoundException('Staff not found');
@@ -27,5 +27,15 @@ export class StaffService {
   createStaff(staffDetails: CreateStaffDto) {
     const newPatient = this.staffRepository.create(staffDetails);
     return this.staffRepository.save(newPatient);
+  }
+
+  async deleteStaff(id: string) {
+    const staff = await this.staffRepository.delete(id);
+
+    if (!staff) {
+      throw new NotFoundException('Staff not found');
+    }
+
+    return staff;
   }
 }
