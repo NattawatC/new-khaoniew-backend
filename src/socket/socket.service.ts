@@ -1,37 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import * as WebSocket from 'websocket';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, WsException } from '@nestjs/websockets';
+import { Server } from 'ws';
 
 @Injectable()
+@WebSocketGateway({ port: 12754 })
 export class WebSocketService {
-  private readonly client: WebSocket.client;
-  private connection: WebSocket.connection | null = null; // Initialize connection as null
+  @WebSocketServer() server: Server;
 
-  constructor() {
-    this.client = new WebSocket.client();
+  @SubscribeMessage('message') // Use @SubscribeMessage instead of @OnMessage
+  async handleIncomingMessage(socket: any, message: string): Promise<void> {
+    try {
+      console.log('Received message from client:', message);
 
-    // Connect to the WebSocket server
-    this.client.connect('ws://localhost:12754', null, null, null, null);
-    
-    // Handle events
-    this.client.on('connect', (connection: WebSocket.connection) => {
-      console.log('Connected to Python WebSocket server');
-      this.connection = connection; // Store the connection object
-    });
+      // Process the received message (e.g., parse JSON)
+      const messageObject = JSON.parse(message);
 
-    this.client.on('error', (error: Error) => {
-      console.error('Connection error:', error);
-    });
+      // Prepare the response message
+      const response = {
+        first: 'Hello from NestJS!',
+        second: 'Message received successfully.',
+      };
+      const responseJson = JSON.stringify(response);
 
-    this.client.on('close', () => {
-      console.log('Connection closed');
-    });
-  }
-
-  sendDataToPython(data: any) {
-    if (this.connection) { // Check if connection is established
-      this.connection.sendUTF(JSON.stringify(data));
-    } else {
-      console.error('Connection not established');
+      // Send the response back to the client
+      await socket.send(responseJson);
+    } catch (error) {
+      // Handle errors appropriately (e.g., log, send error message)
+      console.error('Error handling incoming message:', error);
+      throw new WsException('Error processing message');
     }
   }
 }
