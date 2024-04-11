@@ -3,7 +3,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { compare } from 'bcrypt';
-import { UserLoginDto } from 'src/auth/dto/UserLogin.dto';
+import { UserLoginDto } from 'src/Auth/dto/UserLogin.dto';
 import { Patient } from 'src/typeorm/entities/Patient';
 import { PatientService } from 'src/patient/patient.service';
 import { Staff } from 'src/typeorm/entities/Staff';
@@ -14,7 +14,7 @@ export class AuthService {
   constructor(
     private readonly patientService: PatientService,
     private readonly staffService: StaffService,
-  ) {}
+  ) { }
   async authenticateUser(userLoginDto: UserLoginDto): Promise<{ user: Patient | Staff, userType: string }> {
     const { username, password } = userLoginDto;
 

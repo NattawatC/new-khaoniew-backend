@@ -10,7 +10,7 @@ import { Feedback } from './typeorm/entities/Feedback';
 import { MedicalCondition } from './typeorm/entities/MedicalCondition';
 import { Staff } from './typeorm/entities/Staff';
 import { StaffModule } from './staff/staff.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './Auth/auth.module';
 import { SocketGateway } from './socket/socket.gateway';
 
 @Module({
@@ -33,4 +33,4 @@ import { SocketGateway } from './socket/socket.gateway';
   controllers: [AppController],
   providers: [AppService, SocketGateway],
 })
-export class AppModule {}
+export class AppModule { }
