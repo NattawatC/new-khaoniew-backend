@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { Food } from './Food';
 
 @Entity({ name: 'feedbacks' })
@@ -12,6 +12,6 @@ export class Feedback {
   @Column({default: 'ไม่ระบุ'})
   reviewBy: string;
 
-  @ManyToOne(() => Food, (food) => food.carbs)
-  carbs: Food;
+  @Column()
+  score: string;
 }
