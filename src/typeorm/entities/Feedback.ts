@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Food } from './Food';
 
 @Entity({ name: 'feedbacks' })
 export class Feedback {
@@ -10,4 +11,7 @@ export class Feedback {
 
   @Column({default: 'ไม่ระบุ'})
   reviewBy: string;
+
+  @Column()
+  score: string;
 }

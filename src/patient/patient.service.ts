@@ -227,6 +227,38 @@ export class PatientService {
   //   return this.mealRepository.save(meal);
   // }
 
+//   async updateFeedback(
+//     thaiId: string,
+//     mealId: number,
+//     feedback: UpdateFeedbackDto,
+// ) {
+//     const meal = await this.getPatientAMeal(thaiId, mealId);
+//     if (!meal) {
+//         throw new HttpException(
+//             'Meal not found for this patient',
+//             HttpStatus.NOT_FOUND,
+//         );
+//     }
+
+//     // Update review, score, and reviewBy fields of the meal's feedback
+//     meal.feedback.review = feedback.review;
+//     meal.feedback.score = feedback.score;
+//     meal.feedback.reviewBy = feedback.reviewBy;
+
+//     // Optionally, update reviewStatus
+//     meal.reviewStatus = true;
+
+//     // Update the food's score directly
+//     meal.food.score = feedback.score;
+
+//     // Save the updated entities
+//     await this.mealRepository.save(meal);
+
+//     // Optionally, save the associated food entity
+//     await this.foodRepository.save(meal.food);
+// }
+
+
   async updateFeedback(
     thaiId: string,
     mealId: number,
@@ -243,8 +275,11 @@ export class PatientService {
 
     feedbackToUpdate.review = feedback.review;
     feedbackToUpdate.reviewBy = feedback.reviewBy;
+    feedbackToUpdate.score = feedback.score;
+    meal.food.score = feedback.score
   
     await this.feedbackRepository.save(feedbackToUpdate);
+    await this.foodRepository.save(meal.food);
   
     meal.reviewStatus = true;
     return this.mealRepository.save(meal);
