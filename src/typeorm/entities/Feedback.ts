@@ -12,6 +12,6 @@ export class Feedback {
   @Column({default: 'ไม่ระบุ'})
   reviewBy: string;
 
-  @Column()
+  @Column({default: '0'})
   score: string;
 }
