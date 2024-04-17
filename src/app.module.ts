@@ -12,6 +12,8 @@ import { Staff } from './typeorm/entities/Staff';
 import { StaffModule } from './staff/staff.module';
 import { AuthModule } from './Auth/auth.module';
 import { SocketGateway } from './socket/socket.gateway';
+import { Image } from './typeorm/entities/Images';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -22,13 +24,14 @@ import { SocketGateway } from './socket/socket.gateway';
       username: 'admin',
       password: 'admin',
       database: 'khaoniew',
-      entities: [Patient, Meal, Food, Feedback, MedicalCondition, Staff],
+      entities: [Patient, Meal, Food, Feedback, MedicalCondition, Staff, Image],
       synchronize: true,
       // logging: true,
     }),
     PatientModule,
     StaffModule,
     AuthModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService, SocketGateway],
