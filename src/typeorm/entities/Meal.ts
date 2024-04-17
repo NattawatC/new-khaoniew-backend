@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn
 import { Patient } from './Patient';
 import { Food } from './Food';
 import { Feedback } from './Feedback';
-import { blob } from 'stream/consumers';
+import { Image } from './Images';
 
 @Entity({ name: 'meals' })
 export class Meal {
@@ -18,9 +18,6 @@ export class Meal {
   @Column({ default: false })
   reviewStatus: boolean;
 
-  @Column({type: 'longblob'})
-  image: Buffer;
-
   @ManyToOne(() => Patient, (patient) => patient.meals)
   patient: Patient;
 
@@ -31,4 +28,8 @@ export class Meal {
   @OneToOne(() => Feedback)
   @JoinColumn()
   feedback: Feedback;
+
+  @ManyToOne(() => Image) // Define the relationship with Image entity
+  @JoinColumn()
+  image: Image;
 }

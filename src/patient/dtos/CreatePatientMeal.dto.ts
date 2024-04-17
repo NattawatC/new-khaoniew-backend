@@ -4,5 +4,4 @@ export class CreatePatientMealDto {
   score: string;
   date: Date;
   reviewStatus: boolean;
-  image: Buffer;
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, UseInterceptors, UploadedFile, Get } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Get, Param } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
 
@@ -12,9 +12,9 @@ export class ImageController {
         return this.imageService.uploadImage(file);
     }
 
-    @Get()
-    async getImageById(){
-        
+    @Get(':id')
+    async findByFullName(@Param('id') id: number) {
+      return this.imageService.getImageById(id);
     }
 
     @Get('test')
