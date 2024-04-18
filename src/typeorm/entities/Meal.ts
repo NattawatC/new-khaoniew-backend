@@ -29,7 +29,7 @@ export class Meal {
   @JoinColumn()
   feedback: Feedback;
 
-  @ManyToOne(() => Image) // Define the relationship with Image entity
+  @OneToOne(() => Image)
   @JoinColumn()
   image: Image;
 }

@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Image } from './Images';
 
 @Entity({name: 'foods'})
 export class Food{
@@ -13,4 +14,8 @@ export class Food{
 
     @Column({default: '0'})
     score: string;
+
+    // @OneToOne(() => Image)
+    // @JoinColumn()
+    // image: Image;
 }

@@ -84,9 +84,18 @@ export class PatientController {
   createMeal(
     @Param('id', ParseIntPipe) id: string,
     @Body() createMealDetails: CreatePatientMealDto,
+    @Body('imageId') imageId: number,
   ) {
-    return this.patientService.createPatientMeal(id, createMealDetails);
+    return this.patientService.createPatientMeal(id, createMealDetails, imageId);
   }
+
+  // @Post(':id/meals')
+  // createMeal(
+  //   @Param('id', ParseIntPipe) id: string,
+  //   @Body() createMealDetails: CreatePatientMealDto,
+  // ) {
+  //   return this.patientService.createPatientMeal(id, createMealDetails);
+  // }
 
   @Delete(':id/meals/:mealId')
   deleteMeal(
