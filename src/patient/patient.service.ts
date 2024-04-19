@@ -187,57 +187,9 @@ export class PatientService {
 
 //////////////////////////////////////////////////
 
-  // async createPatientMeal(
-  //   thaiId: string,
-  //   mealDetails: CreatePatientMealDto,
-  // ): Promise<Meal> {
-  //   const patient = await this.patientRepository.findOneBy({ thaiId });
-  //   if (!patient) {
-  //     throw new HttpException(
-  //       'Patient not found. Cannot create meal',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-
-  //   // Create meal
-  //   const newMeal = this.mealRepository.create({
-  //     ...mealDetails,
-  //     patient,
-  //   });
-  //   await this.mealRepository.save(newMeal);
-    
-  //   const scoreInGrams = parseInt(mealDetails.score);
-  //   const score = Math.round(scoreInGrams / 10);
-
-  //   const newFood = this.foodRepository.create({
-  //     name: mealDetails.name,
-  //     carbs: scoreInGrams,
-  //     score: score.toString(),
-  //   });
-  //   await this.foodRepository.save(newFood);
-
-  //   const newFeedback = this.feedbackRepository.create({
-  //     review: 'รอการรีวิว...',
-  //     reviewBy: 'ไม่ระบุ',
-  //   });
-  //   await this.feedbackRepository.save(newFeedback);
-
-  //   newMeal.food = newFood;
-  //   newMeal.feedback = newFeedback;
-  //   await this.mealRepository.save(newMeal);
-
-  //   return this.mealRepository.findOne({
-  //     where: { id: newMeal.id },
-  //     relations: ['food', 'feedback'],
-  //   });
-  // }
-
-/////////////////////////////////
-
   async createPatientMeal(
     thaiId: string,
     mealDetails: CreatePatientMealDto,
-    imageId: number,
   ): Promise<Meal> {
     const patient = await this.patientRepository.findOneBy({ thaiId });
     if (!patient) {
@@ -247,19 +199,10 @@ export class PatientService {
       );
     }
 
-    const image = await this.imageRepository.findOne({where: {id:imageId}});
-    if (!image) {
-    throw new HttpException(
-      'Image not found. Cannot associate with meal',
-      HttpStatus.BAD_REQUEST,
-    );
-    }
-
     // Create meal
     const newMeal = this.mealRepository.create({
       ...mealDetails,
       patient,
-      image: image
     });
     await this.mealRepository.save(newMeal);
     
@@ -283,14 +226,71 @@ export class PatientService {
     newMeal.feedback = newFeedback;
     await this.mealRepository.save(newMeal);
 
-    console.log("new meal",newMeal)
-    console.log("image Id:" ,imageId)
-
     return this.mealRepository.findOne({
       where: { id: newMeal.id },
-      relations: ['food', 'feedback', 'image'],
+      relations: ['food', 'feedback'],
     });
   }
+
+/////////////////////////////////
+
+  // async createPatientMeal(
+  //   thaiId: string,
+  //   mealDetails: CreatePatientMealDto,
+  //   imageId: number,
+  // ): Promise<Meal> {
+  //   const patient = await this.patientRepository.findOneBy({ thaiId });
+  //   if (!patient) {
+  //     throw new HttpException(
+  //       'Patient not found. Cannot create meal',
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
+
+  //   const image = await this.imageRepository.findOne({where: {id:imageId}});
+  //   if (!image) {
+  //   throw new HttpException(
+  //     'Image not found. Cannot associate with meal',
+  //     HttpStatus.BAD_REQUEST,
+  //   );
+  //   }
+
+  //   // Create meal
+  //   const newMeal = this.mealRepository.create({
+  //     ...mealDetails,
+  //     patient,
+  //     image: image
+  //   });
+  //   await this.mealRepository.save(newMeal);
+    
+  //   const scoreInGrams = parseInt(mealDetails.score);
+  //   const score = Math.round(scoreInGrams / 10);
+
+  //   const newFood = this.foodRepository.create({
+  //     name: mealDetails.name,
+  //     carbs: scoreInGrams,
+  //     score: score.toString(),
+  //   });
+  //   await this.foodRepository.save(newFood);
+
+  //   const newFeedback = this.feedbackRepository.create({
+  //     review: 'รอการรีวิว...',
+  //     reviewBy: 'ไม่ระบุ',
+  //   });
+  //   await this.feedbackRepository.save(newFeedback);
+
+  //   newMeal.food = newFood;
+  //   newMeal.feedback = newFeedback;
+  //   await this.mealRepository.save(newMeal);
+
+  //   console.log("new meal",newMeal)
+  //   console.log("image Id:" ,imageId)
+
+  //   return this.mealRepository.findOne({
+  //     where: { id: newMeal.id },
+  //     relations: ['food', 'feedback', 'image'],
+  //   });
+  // }
 
 ///////////////////////////////////////
 
